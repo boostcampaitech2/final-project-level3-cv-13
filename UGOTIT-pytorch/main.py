@@ -36,6 +36,9 @@ def parse_args():
     parser.add_argument('--benchmark_flag', type=str2bool, default=False)
     parser.add_argument('--resume', type=str2bool, default=False)
 
+    parser.add_argument('--wb_prj_name', type=str, default='UGATIT')
+    parser.add_argument('--wb_run_name', type=str, default='DJ_test')
+
     return check_args(parser.parse_args())
 
 """checking arguments"""
