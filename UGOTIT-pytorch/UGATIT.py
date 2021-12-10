@@ -5,6 +5,7 @@ from torch.utils.data import DataLoader
 from networks import *
 from utils import *
 from glob import glob
+from tqdm import tqdm
 
 class UGATIT(object) :
     def __init__(self, args):
@@ -144,7 +145,9 @@ class UGATIT(object) :
         # training loop
         print('training start !')
         start_time = time.time()
-        for step in range(start_iter, self.iteration + 1):
+        pbar = tqdm(range(start_iter, self.iteration + 1))
+
+        for step in pbar:
             if self.decay_flag and step > (self.iteration // 2):
                 self.G_optim.param_groups[0]['lr'] -= (self.lr / (self.iteration // 2))
                 self.D_optim.param_groups[0]['lr'] -= (self.lr / (self.iteration // 2))
@@ -241,7 +244,9 @@ class UGATIT(object) :
             self.genA2B.apply(self.Rho_clipper)
             self.genB2A.apply(self.Rho_clipper)
 
-            print("[%5d/%5d] time: %4.4f d_loss: %.8f, g_loss: %.8f" % (step, self.iteration, time.time() - start_time, Discriminator_loss, Generator_loss))
+            state_msg = ("[%5d/%5d] time: %4.4f d_loss: %.8f, g_loss: %.8f" % (step, self.iteration, time.time() - start_time, Discriminator_loss, Generator_loss))
+            pbar.set_description(state_msg)
+            
             if step % self.print_freq == 0:
                 train_sample_num = 5
                 test_sample_num = 5
