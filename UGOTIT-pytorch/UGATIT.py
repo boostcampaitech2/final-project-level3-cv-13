@@ -5,6 +5,8 @@ from torch.utils.data import DataLoader
 from networks import *
 from utils import *
 from glob import glob
+from tqdm import tqdm 
+import wandb
 
 class UGATIT(object) :
     def __init__(self, args):
@@ -47,6 +49,10 @@ class UGATIT(object) :
         self.device = args.device
         self.benchmark_flag = args.benchmark_flag
         self.resume = args.resume
+
+        #WANB
+        self.wb_prj_name = args.wb_prj_name
+        self.wb_run_name = args.wb_run_name
 
         if torch.backends.cudnn.enabled and self.benchmark_flag:
             print('set benchmark !')
@@ -129,6 +135,10 @@ class UGATIT(object) :
     def train(self):
         self.genA2B.train(), self.genB2A.train(), self.disGA.train(), self.disGB.train(), self.disLA.train(), self.disLB.train()
 
+        # wandb logging init
+        wandb.init(project=self.wb_prj_name, name=self.wb_run_name, entity="cval_lightweight")
+
+
         start_iter = 1
         if self.resume:
             model_list = glob(os.path.join(self.result_dir, self.dataset, 'model', '*.pt'))
@@ -144,7 +154,9 @@ class UGATIT(object) :
         # training loop
         print('training start !')
         start_time = time.time()
-        for step in range(start_iter, self.iteration + 1):
+        pbar = tqdm(range(start_iter, self.iteration + 1))
+
+        for step in pbar:
             if self.decay_flag and step > (self.iteration // 2):
                 self.G_optim.param_groups[0]['lr'] -= (self.lr / (self.iteration // 2))
                 self.D_optim.param_groups[0]['lr'] -= (self.lr / (self.iteration // 2))
@@ -240,8 +252,10 @@ class UGATIT(object) :
             # clip parameter of AdaILN and ILN, applied after optimizer step
             self.genA2B.apply(self.Rho_clipper)
             self.genB2A.apply(self.Rho_clipper)
+            
+            state_msg = ("[%5d/%5d] time: %4.4f d_loss: %.8f, g_loss: %.8f" % (step, self.iteration, time.time() - start_time, Discriminator_loss, Generator_loss))
+            pbar.set_description(state_msg)
 
-            print("[%5d/%5d] time: %4.4f d_loss: %.8f, g_loss: %.8f" % (step, self.iteration, time.time() - start_time, Discriminator_loss, Generator_loss))
             if step % self.print_freq == 0:
                 train_sample_num = 5
                 test_sample_num = 5
@@ -343,6 +357,25 @@ class UGATIT(object) :
                 params['disLA'] = self.disLA.state_dict()
                 params['disLB'] = self.disLB.state_dict()
                 torch.save(params, os.path.join(self.result_dir, self.dataset + '_params_latest.pt'))
+
+                # wandb
+                wandb.log({
+                    "A2B images": wandb.Image(A2B[:,:,::-1]),
+                    "B2A images": wandb.Image(B2A[:,:,::-1]),
+                })
+
+            
+            if step % 25 == 0:
+                wandb.log(
+                    {
+                        "Train Generator B2A Loss": round(G_loss_A.item(), 4),
+                        "Train Generator A2B Loss": round(G_loss_B.item(),4),
+                        "Train Discriminator A Loss": round(D_loss_A.item(), 4),
+                        "Train Discriminator B Loss": round(D_loss_B.item(),4)
+                    }
+                )
+        wandb.run.finish() 
+
 
     def save(self, dir, step):
         params = {}
