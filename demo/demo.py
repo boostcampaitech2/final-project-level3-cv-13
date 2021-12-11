@@ -29,8 +29,8 @@ def main():
 
         # 업로드 된 이미지 보여주기
         img_byte = uploded_file.getvalue()
-        img = Image.open(io.BytesIO(img_byte))
-        st.image(img, caption="Uploaded Image", width=300)
+        img = Image.open(io.BytesIO(img_byte)).convert('RGB')
+        st.image(img, caption=f"Uploaded Image {img.size}", width=300)
 
         # 업로드 된 이미지를 입력으로 GAN을 통해 실사 이미지 생성
         st.title("캐릭터의 얼굴을 실사화 합니다...")

@@ -27,13 +27,17 @@ def denorm(x):
 
 @st.cache(allow_output_mutation=True)
 def get_generated_image(img, device):
+    width, height = img.size[0], img.size[1]
+    _min = min(width, height)
+
     trfm = transforms.Compose([
+        transforms.CenterCrop(_min),
         transforms.Resize((img_size, img_size)),
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
     ])
     _input = trfm(img).unsqueeze(0).to(device)
-    A2B, B2A = load_model("./data/webtoon2selfie_params_latest.pt", device)
+    A2B, B2A = load_model("./data/toon2real_params_latest.pt", device)
 
     with torch.no_grad():
         A2B.eval()

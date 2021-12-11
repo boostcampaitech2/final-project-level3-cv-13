@@ -41,7 +41,9 @@ def get_embedding(img, device):
 def caculate_embedding_distance(input_embedding, embeddings):
     dist = np.array([(input_embedding - embedding).norm().item()
                     for embedding in embeddings])
+    
     idx_sort = dist.argsort()
+    dist = np.sort(dist)
 
     return dist, idx_sort
 
