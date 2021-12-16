@@ -8,14 +8,6 @@ import glob
 from scipy.ndimage import rotate
 import torch
 
-
-data_path = "/opt/ml/webtoon/webtoon_images"
-face_score_threshold = 0.9  #@param {type: 'slider', min: 0, max: 1, step:0.1}
-landmark_score_threshold = 0.3  #@param {type: 'slider', min: 0, max: 1, step:0.1}
-show_box_score = True  #@param {'type': 'boolean'}
-draw_contour = False  #@param {'type': 'boolean'}
-skip_contour_with_low_score = True  #@param {'type': 'boolean'}
-
 def get_center_eye(landmark):
     # get center of each eye
     left_eye_center = list(map(int, (landmark[12]+landmark[15])/2))[:-1]
@@ -42,7 +34,7 @@ def get_angle(landmark, eps=1e-6):
         point_3rd = (right_eye_x, left_eye_y)
         direction = -1
 
-    ## get a triangle
+    # get a triangle
     a = get_euclidean_dist(left_eye_center, point_3rd)
     b = get_euclidean_dist(right_eye_center, left_eye_center)
     c = get_euclidean_dist(right_eye_center, point_3rd)
