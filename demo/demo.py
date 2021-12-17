@@ -39,12 +39,8 @@ def main():
         a2b = transforms.ToPILImage()(a2b.squeeze(0))
         b2a = transforms.ToPILImage()(b2a.squeeze(0))
 
-        cols2 = st.columns(2)
-        with cols2[0]:
-            st.image(a2b, caption="a2b", width=256)
-        with cols2[1]:
-            st.image(b2a, caption="b2a", width=256)
-
+        st.image(a2b, caption="실사화", width=256)
+        
         half_time = time.time()
         st.write("time : " + str(half_time-start_time))
 
