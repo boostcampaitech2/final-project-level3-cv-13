@@ -6,7 +6,7 @@ import requests
 
 
 # 생성된 이미지 임베딩 추출 및 유사한 연예인 임베딩 검색
-@st.cache(ttl=500)
+@st.cache(ttl=50)
 def embed_phase(r):
   
     file = {"file": r.content}
@@ -18,7 +18,7 @@ def embed_phase(r):
 
 
 # 업로드 된 이미지를 입력으로 GAN을 통해 실사 이미지 생성
-@st.cache(ttl=500)
+@st.cache(ttl=50)
 def gan_phase(uploaded_file, img_byte):   
     files = [
         ('files', (uploaded_file.name, img_byte,
