@@ -49,6 +49,7 @@ def main():
         st.image(img, caption=f"Uploaded Image {img.size}", width=300)
 
         st.title("캐릭터의 얼굴을 실사화 합니다...")
+
         start_time = time.time()
         r, a2b = gan_phase(uploaded_file, img_byte)
         st.image(a2b, caption=f"gen Image {img.size}", width=256)
