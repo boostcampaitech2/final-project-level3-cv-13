@@ -2,7 +2,6 @@ from facenet_pytorch import MTCNN, InceptionResnetV1
 import torch
 import numpy as np
 import pickle
-import streamlit as st
 from torchvision import transforms
 
 
@@ -25,7 +24,6 @@ def get_embedding(img, device):
 
     # 입력된 이미지에서 얼굴을 찾지 못할 경우 입력된 이미지 자체로 임베딩 추출
     if x_aligned == None:
-        st.write("생성된 이미지에서 얼굴을 찾을 수 없습니다!!!")
         x_aligned = transforms.ToTensor()(img)
 
     resnet = InceptionResnetV1(pretrained='vggface2').eval().to(device)
@@ -37,11 +35,12 @@ def get_embedding(img, device):
     return input_embedding
 
 
-@st.cache
 def caculate_embedding_distance(input_embedding, embeddings):
     dist = np.array([(input_embedding - embedding).norm().item()
                     for embedding in embeddings])
+    
     idx_sort = dist.argsort()
+    dist = np.sort(dist)
 
     return dist, idx_sort
 
