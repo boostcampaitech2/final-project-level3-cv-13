@@ -19,7 +19,7 @@ def embed_phase(r):
 
 # 업로드 된 이미지를 입력으로 GAN을 통해 실사 이미지 생성
 @st.cache(ttl=100)
-def gan_phase(uploaded_file, img_byte, img):   
+def gan_phase(uploaded_file, img_byte):   
     files = [
         ('files', (uploaded_file.name, img_byte,
                     uploaded_file.type))
@@ -50,7 +50,7 @@ def main():
 
         st.title("캐릭터의 얼굴을 실사화 합니다...")
         start_time = time.time()
-        r, a2b = gan_phase(uploaded_file, img_byte, img)
+        r, a2b = gan_phase(uploaded_file, img_byte)
         st.image(a2b, caption=f"gen Image {img.size}", width=256)
         end_time = time.time()
         st.write("time : " + str(end_time-start_time))
