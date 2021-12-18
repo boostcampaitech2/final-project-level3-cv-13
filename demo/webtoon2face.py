@@ -6,6 +6,9 @@ from torchvision import transforms
 from tqdm import tqdm
 import lpips
 from model import Generator
+from ani_align import align_webtoon_image
+import numpy as np
+from PIL import Image
 
 
 toon_ckpt = "./data/561000.pt"
@@ -64,6 +67,12 @@ def denorm(x):
 
 def preprocess_image(img, device):
     img_size = 256
+
+    image = np.asarray(img)
+    aligned_img = align_webtoon_image(image, device)
+
+    if type(aligned_img) == np.ndarray:
+        img = Image.fromarray(aligned_img)
 
     width, height = img.size[0], img.size[1]
     _min = min(width, height)
