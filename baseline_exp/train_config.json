@@ -1,0 +1,9 @@
+{
+    "data_dir": "/opt/ml/facenet_pytorch/data/test",
+    "model_path": "/opt/ml/facenet_pytorch/models/trained_model",
+    "batch_size": 64,        
+    "epochs": 1,
+    "num_workers": 8,
+    "resize": 160,
+    "train_ratio": 0.9
+}
