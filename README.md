@@ -145,11 +145,10 @@ python face2celeb.py
 ### 6. Demo
 
 - 실행 결과
-|                         웹툰                                             |                                                            실사화                        |                     
-| :------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: | 
-| <a href='https://github.com/tygu1004'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon1.png' width='400px'/></a> | <a href='https://github.com/gkswns3708'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon1-photo.png' width='400px'/></a> |
-| <a href='https://github.com/tygu1004'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon2.png' width='400px'/></a> | <a href='https://github.com/gkswns3708'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon2-photo.png' width='400px'/></a> |
-| <a href='https://github.com/tygu1004'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon3.png' width='400px'/></a> | <a href='https://github.com/gkswns3708'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon3-phto.jpeg' width='400px'/></a> |
+
+| <a href='https://github.com/tygu1004'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon1.png' width='300px'/></a> | <a href='https://github.com/gkswns3708'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon1-photo.png' width='300px'/></a> |
+| <a href='https://github.com/tygu1004'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon2.png' width='300px'/></a> | <a href='https://github.com/gkswns3708'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon2-photo.png' width='300px'/></a> |
+| <a href='https://github.com/tygu1004'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon3.png' width='300px'/></a> | <a href='https://github.com/gkswns3708'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon3-phto.jpeg' width='300px'/></a> |
 
 - demo 영상
   [https://youtu.be/_sUZ2_L7Owg](https://youtu.be/_sUZ2_L7Owg)
