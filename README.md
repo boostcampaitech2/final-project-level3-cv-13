@@ -1,4 +1,4 @@
-# final-project-level3-cv-13: CASToon
+# Final-project-level3-cv-13: CASToon
 
 ---
 
@@ -58,9 +58,9 @@ wandb==0.12.9
   ```bash
   cd webtoon_det
   python align_crop.py --image_name IMAGE_NAME
-  										 --model MODEL
-  										 --face_thres FACE_THRES
-  										 --landmark_thres LANDMARK_THRES
+  		       --model MODEL
+  		       --face_thres FACE_THRES
+  		       --landmark_thres LANDMARK_THRES
   ```
 
   **Step 2)** 얼굴 이미지의 face crop과 embedding 얻기
@@ -68,11 +68,11 @@ wandb==0.12.9
   ```python
   cd ../embedding
   python get_face_embedding.py --detect_size DETECT_SIZE
-  														 --data_dir DATA_DIR
-  														 --save_dir SAVE_DIR
-  														 --img_info_dir IMAGE_INFO_DIR
-  														 --save_crops SAVE_CROPS
-  														 --crop_save_dir CROP_SAVE_DIR
+  			       --data_dir DATA_DIR
+  			       --save_dir SAVE_DIR
+  			       --img_info_dir IMAGE_INFO_DIR
+  			       --save_crops SAVE_CROPS
+  			       --crop_save_dir CROP_SAVE_DIR
   ```
 
 - Face Generator (UI2I)
@@ -104,14 +104,16 @@ wandb==0.12.9
 
 ### 4-2. Inference 단계
 
-**Step 1)** 입력 웹툰 이미지 align
+**Step 1)** 웹툰 이미지를 넣으면 실사화 한 후에, 임베딩 벡터를 이용하여 얼굴 유사도 계산 k개의 가장 까까운 이미지 출력
 
 ```python
-cd webtoon_det
-python align_crop.py --image_name IMAGE_NAME
-										 --model MODEL
-										 --face_thres FACE_THRES
-										 --landmark_thres LANDMARK_THRES
+cd demo
+python inference.py  --toon_ckpt webtoon_stylegan_model_path
+		     --real_ckpt photo_stylegan_model_path
+   		     --toon_fact webtoon_stylegan_model_factor_path
+	             --webtoon_image_path webtoon_Image_Path
+		     --max_k k
+		     -o output
 ```
 
 **Step 2)** 학습시킨 StyleGAN2 모델을 기반으로 Source Domain(웹툰)의 이미지를 Latent Code로 변환 후, Latent code를 이용해 다양한 style의 이미지를 생성
@@ -119,7 +121,7 @@ python align_crop.py --image_name IMAGE_NAME
 ```python
 cd UI2I_via_StyleGAN2
 python projector_factor.py --ckpt webtoon_stylegan_model_path --fact webtoon_stylegan_model_factor_path IMAGE_FILE
-python gen_multi_style.py --model1 webtoon_model_path --model2 photo_model_path --fact webtoon_inverse.pt --fact_base webtoon_stylegan_model_factor_path -o output_path --swap_layer 3 --stylenum 10
+python gen_multi_style.py --model1 webtoon_stylegan_model_path --model2 photo_stylegan_model_path --fact webtoon_inverse.pt --fact_base webtoon_stylegan_model_factor_path -o output_path --swap_layer 3 --stylenum 10
 ```
 
 **Step 3)** 생성된 얼굴 Recognition (임베딩 계산)
@@ -142,11 +144,14 @@ python face2celeb.py
 
 ### 6. Demo
 
-- 실행 결과 (사진 3~5장 정도?)
-
+- 실행 결과
+|                         웹툰                                             |                                                            실사화                        |                     
+| :------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: | 
+| <a href='https://github.com/tygu1004'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon1.png' width='400px'/></a> | <a href='https://github.com/gkswns3708'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon1-photo.png' width='400px'/></a> |
+| <a href='https://github.com/tygu1004'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon2.png' width='400px'/></a> | <a href='https://github.com/gkswns3708'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon2-photo.png' width='400px'/></a> |
+| <a href='https://github.com/tygu1004'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon3.png' width='400px'/></a> | <a href='https://github.com/gkswns3708'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon3-phto.jpeg' width='400px'/></a> |
 
 - demo 영상
-
   [https://youtu.be/_sUZ2_L7Owg](https://youtu.be/_sUZ2_L7Owg)
 
 ---
