@@ -116,22 +116,6 @@ python inference.py  --toon_ckpt webtoon_stylegan_model_path
 		     -o output
 ```
 
-**Step 2)** 학습시킨 StyleGAN2 모델을 기반으로 Source Domain(웹툰)의 이미지를 Latent Code로 변환 후, Latent code를 이용해 다양한 style의 이미지를 생성
-
-```python
-cd UI2I_via_StyleGAN2
-python projector_factor.py --ckpt webtoon_stylegan_model_path --fact webtoon_stylegan_model_factor_path IMAGE_FILE
-python gen_multi_style.py --model1 webtoon_stylegan_model_path --model2 photo_stylegan_model_path --fact webtoon_inverse.pt --fact_base webtoon_stylegan_model_factor_path -o output_path --swap_layer 3 --stylenum 10
-```
-
-**Step 3)** 생성된 얼굴 Recognition (임베딩 계산)
-**Step 4)** 얼굴 유사도 계산 후 k개의 가까운 이미지 출력
-
-```python
-cd ../demo
-python face2celeb.py
-```
-
 ---
 
 ### 5. 사용한 Datasets
