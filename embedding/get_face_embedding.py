@@ -1,5 +1,3 @@
-# 최초 한 번만 실행하면 됨.
-# 일단 할 거는 crop 저장하는 것부터 구현하기
 import argparse
 import cv2
 from dataset import DetectionImageDataset, EmbeddingDataset
@@ -14,7 +12,7 @@ from torch.utils.data import DataLoader
 from typing import List
 
 
-## 더 추가할 부분 -> 현재 코드는 연예인 얼굴에만 적용되는 코드.. + crop_img
+# TODO 웹툰 이미지에 해당하는 crop 구현
 def collate_fn(x):
     return x[0]
 
@@ -102,7 +100,7 @@ def main(args):
 
     # calculate embedding vectors
     print("Calculating Embedding...")
-    aligned_dataset = EmbeddingDataset(aligned)
+    aligned_dataset = EmbeddingDataset(aligned, names, paths)
     alinged_loader = DataLoader(aligned_dataset, num_workers=workers, batch_size=50)
 
 

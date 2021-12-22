@@ -12,7 +12,7 @@ class DetectionImageDataset(Dataset):
     def __init__(self, data_path, select_names):
         super(DetectionImageDataset, self).__init__()
         self.imgs, self.paths, self.labels, self.idx_to_class = self._make_dataset(data_path, select_names)
-        #self.idx_to_class -> class 매핑해주는 index인 듯
+        
         
     def __len__(self):
         return len(self.imgs)
