@@ -146,6 +146,8 @@ python face2celeb.py
 
 - 실행 결과
 
+|                             웹툰 이미지                              |                                       실사화 이미지                                      |  
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: |
 | <a href='https://github.com/tygu1004'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon1.png' width='300px'/></a> | <a href='https://github.com/gkswns3708'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon1-photo.png' width='300px'/></a> |
 | <a href='https://github.com/tygu1004'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon2.png' width='300px'/></a> | <a href='https://github.com/gkswns3708'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon2-photo.png' width='300px'/></a> |
 | <a href='https://github.com/tygu1004'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon3.png' width='300px'/></a> | <a href='https://github.com/gkswns3708'><img src='https://github.com/boostcampaitech2/final-project-level3-cv-13/blob/main/contributors/webtoon3-phto.jpeg' width='300px'/></a> |
