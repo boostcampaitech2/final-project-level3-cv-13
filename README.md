@@ -1,6 +1,4 @@
-# final-project-level3-cv-13
-
-# CASToon
+# final-project-level3-cv-13: CASToon
 
 ---
 
