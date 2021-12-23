@@ -14,8 +14,10 @@
 
 - **UGOTIT-pytorch** : U-GAT-IT 모델을 학습 및 모델 생성
 - **UI2I_via_StyleGAN2** : StyleGAN2 모델을 학습 및 모델 생성
+- **baseline_exp** : InceptionResNetV1 모델 transfer-learning
 - **demo** : 데모 페이지 실행
 - **embedding** : 사람 및 웹툰 얼굴 embedding 생성 및 시각화
+- **webtoon_det** : 웹툰 얼굴 alignment 및 crop
 
 ---
 
