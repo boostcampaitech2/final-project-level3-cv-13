@@ -5,9 +5,12 @@ from tqdm import tqdm
 import argparse
 
 
-def return_nearest_image(input_embedding, embeddings, path_infos):
+def return_nearest_image(input_embedding, embeddings, path_infos, similarity):
     repeat_embedding = input_embedding.unsqueeze(0).expand(embeddings.shape[0], -1)
-    dist = np.linalg.norm(repeat_embedding - embeddings, axis=-1, ord=2)
+    if similarity == "l2":
+        dist = np.linalg.norm(repeat_embedding - embeddings, axis=-1, ord=2)
+    elif similarity == "cosine":
+        dist = -(repeat_embedding*embeddings).sum(axis=-1)
     idx_sort = dist.argsort()
 
     return path_infos[idx_sort[1]][0]
@@ -33,7 +36,7 @@ def main(args):
     for i in tqdm(range(len(embeddings))):
         input_embedding = embeddings[i]
 
-        min_info = return_nearest_image(input_embedding, embeddings, path_infos)
+        min_info = return_nearest_image(input_embedding, embeddings, path_infos, args.similarity)
         if path_infos[i][0] == min_info:
             num_correct += 1
         else:
@@ -57,6 +60,12 @@ if __name__ == "__main__":
         "-i",
         help="path of pickle file where path of images is saved",
         default="/opt/ml/facenet_pytorch/data/embedding_info_backup.data",
+    )
+    parser.add_argument(
+        "--similarity",
+        "-s",
+        help="method of caculating similarity",
+        default="l2",
     )
     args = parser.parse_args()
     main(args)
