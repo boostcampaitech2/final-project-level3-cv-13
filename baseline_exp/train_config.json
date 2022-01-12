@@ -3,7 +3,12 @@
     "model_path": "/opt/ml/facenet_pytorch/models/trained_model",
     "batch_size": 64,        
     "epochs": 1,
+    "val_epochs": 1,
     "num_workers": 8,
     "resize": 160,
-    "train_ratio": 0.9
+    "margin": 80,
+    "min_face_size": 20,
+    "train_ratio": 0.9,
+    "lr": 0.001,
+    "milestones": [5, 10]
 }

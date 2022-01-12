@@ -25,15 +25,17 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print("Running on device: {}".format(device))
 
 
-def main(cfgs):
+def crop_image(cfgs):
+    """
+    MTCNN을 사용하여, 주어진 데이터로부터 얼굴을 crop한 데이터를 생성해내는 함수
+
+    Args:
+        cfgs (dict): 필요한 변수 값을 저장해둔 json파일 내용
+    """
     mtcnn = MTCNN(
         image_size=cfgs["resize"],
-        margin=80,
-        min_face_size=20,
-        thresholds=[0.6, 0.7, 0.7],
-        factor=0.709,
-        post_process=True,
-        device=device,
+        margin=cfgs["margin"],
+        min_face_size=cfgs["min_face_size"],
     )
 
     dataset = datasets.ImageFolder(cfgs["data_dir"])
@@ -53,16 +55,14 @@ def main(cfgs):
         mtcnn(x, save_path=y)
         print("\rBatch {} of {}".format(i + 1, len(loader)), end="")
 
-    # Remove mtcnn to reduce GPU memory usage
-    del mtcnn
+    del mtcnn  # GPU 메모리 사용량 줄이기 위해 변수 삭제
 
-    resnet = InceptionResnetV1(
-        classify=True, pretrained="vggface2", num_classes=len(dataset.class_to_idx)
-    ).to(device)
 
-    optimizer = optim.Adam(resnet.parameters(), lr=0.001)
-    scheduler = MultiStepLR(optimizer, [5, 10])
+def main(cfgs):
+    # step1. 데이터 전처리
+    crop_image(cfgs)
 
+    # step2. 데이터로더 정의
     trans = transforms.Compose(
         [
             transforms.RandomHorizontalFlip(),
@@ -72,6 +72,7 @@ def main(cfgs):
         ]
     )
     dataset = datasets.ImageFolder(cfgs["data_dir"], transform=trans)
+
     img_inds = np.arange(len(dataset))
     np.random.shuffle(img_inds)
     train_inds = img_inds[: int(cfgs["train_ratio"] * len(img_inds))]
@@ -89,6 +90,13 @@ def main(cfgs):
         batch_size=cfgs["batch_size"],
         sampler=SubsetRandomSampler(val_inds),
     )
+
+    # step3. model, optimizer, scheduler, loss, metric 정의
+    resnet = InceptionResnetV1(
+        classify=True, pretrained="vggface2", num_classes=len(dataset.class_to_idx)
+    ).to(device)
+    optimizer = optim.Adam(resnet.parameters(), lr=cfgs["lr"])
+    scheduler = MultiStepLR(optimizer, cfgs["milestones"])
 
     loss_fn = torch.nn.CrossEntropyLoss()
     metrics = {"fps": training.BatchTimer(), "acc": training.accuracy}
@@ -109,6 +117,7 @@ def main(cfgs):
         writer=writer,
     )
 
+    # step4. 학습
     for epoch in range(cfgs["epochs"]):
         print(
             f"\nEpoch: {epoch}/{cfgs['epochs']}, Time: {datetime.now(timezone('Asia/Seoul')).strftime('%Y-%m-%d %H:%M:%S')}"
@@ -138,7 +147,7 @@ def main(cfgs):
             device=device,
             writer=writer,
         )
-        if epoch % 2 == 0:
+        if epoch % cfgs["val_epochs"] == 0:
             torch.save(
                 resnet.state_dict(),
                 os.path.join(
