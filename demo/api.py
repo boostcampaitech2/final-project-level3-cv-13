@@ -5,7 +5,8 @@ from typing import List
 from PIL import Image
 import io
 import torch
-from webtoon2face import get_generated_image
+from webtoon2face_stylegan import get_generated_image_StylGAN
+from webtoon2face_ugatit import get_generated_image_UGATIT
 from face2celeb import get_embedding, get_nearest_image
 import os
 from torchvision import transforms
@@ -15,14 +16,32 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 img_root = "./data/actor_data"
 
 
-@app.post("/gan", description="gan")
-async def gan_img(files: List[UploadFile] = File(...)):
+@app.post("/StyleGAN", description="StyleGAN")
+async def gan_img_StyleGAN(files: List[UploadFile] = File(...)):
     for file in files:
         image_bytes = await file.read()
         img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
-        a2b = get_generated_image(img, device)
+        a2b, file_name = get_generated_image_StylGAN(img, device)
 
     a2b = transforms.ToPILImage()(a2b.squeeze(0))
+    a2b.save(f"./data/db/{file_name}_gan.png")
+
+    img_byte_arr = io.BytesIO()
+    a2b.save(img_byte_arr, format='PNG')
+    img_byte_arr = img_byte_arr.getvalue()
+
+    return Response(content=img_byte_arr, media_type="image/png")
+
+
+@app.post("/U-GAT-IT", description="U-GAT-IT")
+async def gan_img_StyleGAN(files: List[UploadFile] = File(...)):
+    for file in files:
+        image_bytes = await file.read()
+        img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
+        a2b, file_name = get_generated_image_UGATIT(img, device)
+
+    a2b = transforms.ToPILImage()(a2b.squeeze(0))
+    a2b.save(f"./data/db/{file_name}_gan.png")
 
     img_byte_arr = io.BytesIO()
     a2b.save(img_byte_arr, format='PNG')
